@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>STL源码剖析(1)-详解空间配置器</title>
+      <link href="/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi.html"/>
+      <url>/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi.html</url>
+      
+        <content type="html"><![CDATA[<h3 id="1、STL六大组件"><a href="#1、STL六大组件" class="headerlink" title="1、STL六大组件"></a>1、STL六大组件</h3><p>STL（Standard Template Library）是C++的标准模板库。主要作用是为了建立数据结构和算法的一套标准，并且降低其间的耦合（coupling）关系以 提升各自的独立性、弹性、交互操作性（相互合作性，interoperability），C++社 群里诞生了 STL（<em>摘自–STL源码剖析</em>）。</p><p>STL提供了六大组件，彼此可以组合套用：</p><blockquote><p>1、容器（containers）：各种数据结构，如$vector，list， deque， set， map$用来存放数据。从实作的角度看，STL 容器是一种 class template。</p><p>2、算法（algorithms）：各种常用算法，如$sort，search，copy，erase$等。从实作的角度看，STL 算法是一种 function template。</p><p>3、迭代器（iterators）：扮演容器与算法之间的胶着剂，是所谓的“泛型指标”。从实作的角度看，迭代器是一种将$operator*, operator-&gt;, operator++, operator–$等指标相 关操作予以多载化的 class template。所有STL容器都附带有自己专属的迭 代器—是的，只有容器设计者才知道如何巡访自己的元素。原生指标（native pointer）也是一种迭代器。</p><p>4、仿函数（functors）：行为类似函数，可作为算法的某种策略。从实作的角度看，仿函数是一种重载了operator()的class或class template。</p><p>5、配接器（adapters）：一种用来修饰容器（containers）或仿函数（functors） 或迭代器（iterators）接口的东西。例如 STL 提供的 $queue$ 和 $stack$，虽然看似容器，其实只能算是一种容器配接器，因为它们的底部完全借重 $deque$，所有动作都由底层的 $deque$供应。改变functor接口者，称 为function adapter，改变container接口者，称为container adapter，改变 iterator界面者，称为iterator adapter。</p><p> 6、配置器（allocators）：负责空间配置与管理。从实作的角度看， 配置器是一个实现了动态空间配置、空间管理、空间释放的 class template。</p></blockquote><h3 id="2、空间配置器"><a href="#2、空间配置器" class="headerlink" title="2、空间配置器"></a>2、空间配置器</h3><h4 id="2-1-什么是空间配置器"><a href="#2-1-什么是空间配置器" class="headerlink" title="2.1 什么是空间配置器"></a>2.1 什么是空间配置器</h4><p>空间配置器就是用来配置、管理和释放空间的，给所有的容器包括算法提供生存空间。</p><blockquote><p>作用：<br>（1）提高代码复用率，功能模块化。<br>（2）减少内存碎片问题。<br>（3）提高内存分配的效率。<br>（4）有内存不足时的应对措施。<br>（5）隐藏实际中对存储空间的分配及释放细节，确保所有被分配的存储空间都最终获得释放。<br>（5）考虑多线程状态。</p></blockquote><p>考虑到小型区块可能导致的内存碎片问题，设置了两级空间配置器。分别为：一级空间配置器、二级空间配置器。当区块大于128字节，调用一级空间配置器；小于等于128字节，为了降低额外开销，用底层较复杂的二级空间配置器。</p><h4 id="2-2-SGI-STL专属空间配置器"><a href="#2-2-SGI-STL专属空间配置器" class="headerlink" title="2.2 SGI STL专属空间配置器"></a>2.2 SGI STL专属空间配置器</h4><!--Why叫“空间配置器”：为什么不说allocator是内存配置器呢？因为空间不一定是内存，空间也可以是磁盘或其它辅助储存媒体。--><p>以下介绍的是 SGI STL 提供的配置器，配置的对象是<font color=red>内存</font> 。</p><p>虽然标准 SGI 也配置了 allocatalor，但是它自己并不使用，原因是效率比较差。</p><p>SGI STL 的每一个容器都指定缺省的空间配置器是 <code>alloc</code>，当我们调用 <code>new</code> 和 <code>delete</code> 进行对象的创建和销毁的时候，也同时会有内存配置操作和释放操作。</p><p>一般而言，我们所习惯的 C++ 内存配置动作和释放动作是这样：</p><pre class="line-numbers language-c++"><code class="language-c++">class Foo &#123; ... &#125;; Foo* pf = new Foo;//配置内存，然后建构对象 delete pf; //将对象解构，然后释放内存<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p>即<code>new</code>和<code>delete</code>同时包含两阶段操作，<code>new</code>的两阶段操作如下：</p><p>(1)调用<code>::operator new</code>配置内存。</p><p>(2) 调用<code>Foo::Foo()</code>构造对象内容。</p><p>delete操作：</p><p>(1)调用 <code>Foo::~Foo()</code>将对象析构。</p><p>(2)调用<code>::operator delete</code>释放内存。</p><p>而为了精密分工，STL allocator将这两阶段动作区分开来。内存配置动作由<code>alloc:allocate()</code>负责，内存释放动作由<code>alloc::deallocate()</code>负责；对象构造动作由<code>::construct()</code>负责，对象析构动作由<code>::destroy()</code>负责。</p><p>STL配置器头文件如下图所示（截自STL源码剖析）：</p><img src="/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi/1.png" class="" title="图 1"><h4 id="2-3-构造和析构函数：construct-和-destroy"><a href="#2-3-构造和析构函数：construct-和-destroy" class="headerlink" title="2.3 构造和析构函数：construct()和 destroy()"></a>2.3 构造和析构函数：construct()和 destroy()</h4><p><code>construct()</code>接受一个指针p和一个初值value，此函数的用途就是将初值设定到指针所指的空间上。</p><p><code>destroy()</code>有两个重载版本，第一个版本接受一个指针，直接调用该对象的析构函数即可将其析构掉。第二个版本接受first和last两个迭代器，将<font color=red>[first,last)</font>范围内的析构掉。</p><h4 id="2-4-内存的配置与释放：std-alloc"><a href="#2-4-内存的配置与释放：std-alloc" class="headerlink" title="2.4 内存的配置与释放：std::alloc"></a>2.4 内存的配置与释放：std::alloc</h4><p>对象构造前的空间配置，和对象析构后的空间释放，由<code>&lt;stl_alloc.h&gt;</code>负责，SGI 对此的设计原则如下：</p><blockquote><ul><li><p>向 system heap要求空间。</p></li><li><p>考虑多绪（multi-threads）状态。 </p></li><li><p>考虑内存不足时的应变措施。 </p></li><li><p>考虑过多「小型区块」可能造成的内存破碎（fragment）问题。</p></li></ul></blockquote><p>考虑小型内存块所可能造成的内存破碎问题，SGI 设计了<font color=red>双层级配置器</font>。</p><p>第一级配置器直接使用 malloc()和free()。</p><p>第二级配置器则视情况采用不同的策略： 当配置区块超过128bytes，视之为“足够大”，便调用第一级配置器；当配置区块小于 128bytes，视之为“过小”，为了降低额外负担便采用复杂的memory pool整理方式，而不再求助于第一级配置器。</p><pre class="line-numbers language-c++"><code class="language-c++"># ifdef __USE_MALLOC...typedef __malloc_alloc_template<0> malloc_alloc;typedef malloc_alloc alloc;//令 alloc为第一级配置器# else...//令 alloc 为第二级配置器typedef __default_alloc_template<__NODE_ALLOCATOR_THREADS, 0> alloc;#endif /* ! __USE_MALLOC */ <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>一二级配置器关系见下图：</p><img src="/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi/2.png" class="" title="图 2"><h4 id="2-5-第一级配置器-malloc-alloc-template-剖析"><a href="#2-5-第一级配置器-malloc-alloc-template-剖析" class="headerlink" title="2.5 第一级配置器 __malloc_alloc_template 剖析"></a>2.5 第一级配置器 __malloc_alloc_template 剖析</h4><p>喜欢看源码的同学，可以去《STL源码剖析》一书详读具体源码，本小节只罗列几个要点。</p><p>（1）第一级配置器以<code>malloc()， free()，realloc()</code>等C语言函数执行实际的内存配置、释放、重配置动作，并实作出类似 C++的new-handler机制（不能直接运用 C++ new-handler机制，因为它并非使用::operatornew来配置）。 所谓 C++ new handler 机制是：<code>你可以要求系统在内存配置需求无法被满足时， 调用一个你所指定的函数。换句话说一旦::operator new无法达成任务，在丢出std::bad_alloc异常状态之前，会先呼叫由客端指定的处理例程。</code></p><p>（2）SGI 第一级配置器的<code>allocate() 和realloc()</code>在调用<code>malloc()</code> 和<code>realloc()</code>不成功后，改调用<code>oom_malloc()</code>和<code>oom_realloc()</code>。后两者都有内循环，不断调用“内存不足处理例程”，期望在某次调用之后，获得足够的内存而圆满达成任务。但如果“内存不足处理例程”并未被客端设定， <code>oom_malloc()</code>和<code>oom_realloc()</code> 便调用<code>__THROW_BAD_ALLOC</code>， 丢出<code>bad_alloc</code>异常信息，或利用<code>exit(1)</code>中止程序。</p><h4 id="2-6-第二级配置器-default-alloc-template-剖析"><a href="#2-6-第二级配置器-default-alloc-template-剖析" class="headerlink" title="2.6 第二级配置器 __default_alloc_template 剖析"></a>2.6 第二级配置器 __default_alloc_template 剖析</h4><p>第二级配置器设计了许多机制，避免太多”小区块“造成内存的破碎。小区块带来的不仅是内存破碎，还有配置时的额外负担。 因为系统要配置额外的空间来管理内存，并且区块越小，额外负担所占的比例就越大从而浪费资源。如下图所示：</p><img src="/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi/3.png" class="" title="图 3"><p>为了解决上述问题，SGI第二级配置器的作法是，如果区块大小超过 128 bytes，就移交给第一级配置器处理。当区块小于 128 bytes，则以内存池（memory pool）管理，此法又称为次层配置（sub-allocation）：</p><blockquote><p>每次配置一大块内存，并维护对应的自由链表（freelist）。下次若再有相同大小的内存需求，就直接从free-lists中取出。如果客端释放了小区块，就由配置器回收到free-lists中（配置器除了负责配置，也负责回收）。为了方便管理，SGI第二级配置器将区块的内存大小上调至8的倍数（例如客端要求 30 bytes，就自动调整为 32 bytes），并维护 16 个 free-lists，各自管理大小分别为 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128 bytes的小区块。</p></blockquote><p>free-lists 的节点结构如下：</p><pre class="line-numbers language-c++"><code class="language-c++"> union obj &#123;     union obj * free_list_link;     char client_data[1]; /* The client sees this. */ &#125;; <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p>诸君或许会想，为了维护链表（lists），每个节点需要额外的指针（指向下一个节点），这不又造成额外负担吗？你的顾虑是对的，但早已有好的解决办法。没错，用的是<code>union</code>共用体！共用体表示几个变量共用一个内存位置，在不同的时间保存不同的数据类型和不同长度的变量。一物二用的结果是，不会为了维护链表所必须的指针而造成内存的另一种浪费。 在 union obj 中，从第一个字段看，obj 可以看做一个指针，指向链表中的下一个节点；从第二个字段看，obj 可以也看做一个指针，不过此时是指向实际的内存区。</p><h4 id="2-7-空间配置函数allocate（）"><a href="#2-7-空间配置函数allocate（）" class="headerlink" title="2.7 空间配置函数allocate（）"></a>2.7 空间配置函数allocate（）</h4><p><code>allocate()</code>：此函数首先判断内存区块大小，大于 128 bytes 就调用第一级配置器，小 于 128 bytes 就检查对应的 free list。如果free list有可用的区块，就直接拿来用，如果没有可用区块，就将区块大小上调至 8 倍数边界，然后调用refill()， 为 free list 重新填充空间。过程如下图所示：</p><img src="/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi/4.png" class="" title="图 4"><h4 id="2-8-空间释放函函数deallocate"><a href="#2-8-空间释放函函数deallocate" class="headerlink" title="2.8 空间释放函函数deallocate()"></a>2.8 空间释放函函数deallocate()</h4><p><code>deallocate()</code>：此函数首先判断内存区块大小，大于 128 bytes 就调用第一级配置器， 小于 128 bytes 就找出对应的 free list，将区块回收。过程如下图所示：</p><img src="/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi/5.png" class="" title="图 5"><h4 id="2-9-重新填充-free-lists"><a href="#2-9-重新填充-free-lists" class="headerlink" title="2.9 重新填充 free lists"></a>2.9 重新填充 free lists</h4><p>回头讨论先前说过的 <code>allocate()</code>。当它发现free list中没有可用区块了，就调用 <code>refill()</code> 为free list重新填充 空间 。 新的空间取自内存池 （经由<code>chunk_alloc()</code>完成）。预设取得20个新节点（新区块），但万一内存池空间不足，获得的节点数（区块数）可能小于 20。</p><h4 id="2-10-内存池（memory-pool）"><a href="#2-10-内存池（memory-pool）" class="headerlink" title="2.10 内存池（memory pool）"></a>2.10 内存池（memory pool）</h4><p>从内存池中取空间给free list使用，是 <code>chunk_alloc()</code>的工作：<code>chunk_alloc()</code>函数以end_free - start_free 来判断内存池的“水量”。 如果水量充足，就直接取出 20 个区块传回给 free list。如果水量不足以提供 20 个 区块，但还足够供应一个以上的区块，就拨出这不足20个区块的空间出去。这时候其pass by reference 的 nobjs 参数将被修改为实际能够供应的区块数。如果内存池连一个区块空间都无法供应，对客端显然无法交待，此时便需利用<code>malloc()</code> 从 heap 中配置内存，为记忆池注入活水源头以应付需求。新水量的大小为需求量的两倍，再加上一个随着配置次数增加而愈来愈大的附加量。</p><h3 id="3、结语"><a href="#3、结语" class="headerlink" title="3、结语"></a>3、结语</h3><p>STL源码博大精深，本人虽然参考了STL源码剖析以及许多优秀博客，但是难免有疏漏之处，还望大家指正！</p><p>参考文献：《STL源码剖析》等</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> STL </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> STL </tag>
+            
+            <tag> 源码剖析 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>安装docker教程</title>
+      <link href="/1.html"/>
+      <url>/1.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="安装docker教程"><a href="#安装docker教程" class="headerlink" title="安装docker教程"></a>安装docker教程</h1><h2 id="1、若有旧版本先卸载。"><a href="#1、若有旧版本先卸载。" class="headerlink" title="1、若有旧版本先卸载。"></a>1、若有旧版本先卸载。</h2><h2 id="2、安装"><a href="#2、安装" class="headerlink" title="2、安装"></a>2、安装</h2><h3 id="2-1-更新apt包索引"><a href="#2-1-更新apt包索引" class="headerlink" title="2.1 更新apt包索引"></a>2.1 更新apt包索引</h3><p><code>sudo apt-get update</code></p><h3 id="2-2-安装apt依赖包"><a href="#2-2-安装apt依赖包" class="headerlink" title="2.2 安装apt依赖包"></a>2.2 安装apt依赖包</h3><p><code>sudo apt-get install \   apt-transport-https \   ca-certificates \   curl \   gnupg-agent \   software-properties-common</code></p><h3 id="2-3-添加Docker的GPG秘钥"><a href="#2-3-添加Docker的GPG秘钥" class="headerlink" title="2.3 添加Docker的GPG秘钥"></a>2.3 添加Docker的GPG秘钥</h3><p><code>curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | sudo apt-key add -</code></p><h3 id="2-4-9DC8-5822-9FC7-DD38-854A-E2D8-8D81-803C-0EBF-CD88-通过搜索指纹的后8个字符，验证您现在是否拥有带有指纹的密钥"><a href="#2-4-9DC8-5822-9FC7-DD38-854A-E2D8-8D81-803C-0EBF-CD88-通过搜索指纹的后8个字符，验证您现在是否拥有带有指纹的密钥" class="headerlink" title="2.4 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 通过搜索指纹的后8个字符，验证您现在是否拥有带有指纹的密钥"></a>2.4 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 通过搜索指纹的后8个字符，验证您现在是否拥有带有指纹的密钥</h3><p><code>sudo apt-key fingerprint 0EBFCD88</code></p><h3 id="2-5-使用以下指令设置稳定版仓库"><a href="#2-5-使用以下指令设置稳定版仓库" class="headerlink" title="2.5 使用以下指令设置稳定版仓库"></a>2.5 使用以下指令设置稳定版仓库</h3><p><code>sudo add-apt-repository \   &quot;deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/ \  $(lsb_release -cs) \  stable&quot;</code></p><h3 id="2-6-安装-Docker-Engine-Community"><a href="#2-6-安装-Docker-Engine-Community" class="headerlink" title="2.6 安装 Docker Engine-Community"></a>2.6 安装 Docker Engine-Community</h3><p><code>sudo apt-get install docker-ce docker-ce-cli containerd.io</code></p><p>如果要安装特定版本的</p><p><code>apt-cache madison docker-ce</code></p><p><code>sudo apt-get install docker-ce=&lt;VERSION_STRING&gt; docker-ce-cli=&lt;VERSION_STRING&gt; containerd.io</code></p><p>2.7 测试安装是否成功</p><p><code>sudo docker run hello-world</code></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> docker </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ubuntu </tag>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>安装docker后设置不用sudo命令</title>
+      <link href="/2.html"/>
+      <url>/2.html</url>
+      
+        <content type="html"><![CDATA[<h4 id="1、创建Docker组"><a href="#1、创建Docker组" class="headerlink" title="1、创建Docker组"></a>1、创建Docker组</h4><p><code>sudo groupadd docker</code></p><h4 id="2、将用户加入docker组"><a href="#2、将用户加入docker组" class="headerlink" title="2、将用户加入docker组"></a>2、将用户加入docker组</h4><p><code>sudo usermod -aG docker $USER</code></p><h4 id="3、重启机器或者运行一下命令"><a href="#3、重启机器或者运行一下命令" class="headerlink" title="3、重启机器或者运行一下命令"></a>3、重启机器或者运行一下命令</h4><p><code>newgrp docker </code></p><h4 id="4、验证是否可以不带sudo"><a href="#4、验证是否可以不带sudo" class="headerlink" title="4、验证是否可以不带sudo"></a>4、验证是否可以不带sudo</h4><p><code>docker run hello-world</code></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> docker </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ubuntu </tag>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
