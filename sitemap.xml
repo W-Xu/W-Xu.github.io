@@ -9,16 +9,16 @@
   </url>
   
   <url>
-    <loc>https://kotewall.cn/an-zhuang-git.html</loc>
+    <loc>https://kotewall.cn/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi.html</loc>
     
     <lastmod>2023-09-07</lastmod>
     
   </url>
   
   <url>
-    <loc>https://kotewall.cn/stl-yuan-ma-pou-xi-1-xiang-jie-kong-jian-pei-zhi-qi.html</loc>
+    <loc>https://kotewall.cn/an-zhuang-git.html</loc>
     
-    <lastmod>2021-12-05</lastmod>
+    <lastmod>2023-09-07</lastmod>
     
   </url>
   
@@ -129,6 +129,34 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://kotewall.cn/tags/%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2023-09-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/tags/JS/</loc>
+    <lastmod>2023-09-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/tags/Hexo/</loc>
+    <lastmod>2023-09-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/tags/Git/</loc>
+    <lastmod>2023-09-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
@@ -140,6 +168,20 @@
   
   <url>
     <loc>https://kotewall.cn/categories/STL/</loc>
+    <lastmod>2023-09-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/categories/%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2023-09-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/categories/Git/</loc>
     <lastmod>2023-09-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
