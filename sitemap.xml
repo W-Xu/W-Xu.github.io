@@ -95,20 +95,6 @@
 
   
   <url>
-    <loc>https://kotewall.cn/tags/ubuntu/</loc>
-    <lastmod>2023-09-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://kotewall.cn/tags/docker/</loc>
-    <lastmod>2023-09-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://kotewall.cn/tags/C/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>daily</changefreq>
@@ -124,6 +110,27 @@
   
   <url>
     <loc>https://kotewall.cn/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</loc>
+    <lastmod>2023-09-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/tags/ubuntu/</loc>
+    <lastmod>2023-09-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/tags/docker/</loc>
+    <lastmod>2023-09-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/tags/Git/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -150,21 +157,7 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://kotewall.cn/tags/Git/</loc>
-    <lastmod>2023-09-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
-  
-  <url>
-    <loc>https://kotewall.cn/categories/docker/</loc>
-    <lastmod>2023-09-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
   
   <url>
     <loc>https://kotewall.cn/categories/STL/</loc>
@@ -174,7 +167,7 @@
   </url>
   
   <url>
-    <loc>https://kotewall.cn/categories/%E5%8D%9A%E5%AE%A2/</loc>
+    <loc>https://kotewall.cn/categories/docker/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -182,6 +175,13 @@
   
   <url>
     <loc>https://kotewall.cn/categories/Git/</loc>
+    <lastmod>2023-09-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kotewall.cn/categories/%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
