@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>C++在线文档查阅</title>
+      <link href="/c-jia-jia-wen-dang.html"/>
+      <url>/c-jia-jia-wen-dang.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-C-在线文档"><a href="#C-C-在线文档" class="headerlink" title="C/C++在线文档"></a>C/C++在线文档</h1><p>cplusplus.com - The C++ Resources Network</p><p><a href="http://www.cplusplus.com/">http://www.cplusplus.com/</a></p><p>cppreference.com - English</p><p><a href="https://en.cppreference.com/w/">https://en.cppreference.com/w/</a></p><p>cppreference.com - 中文</p><p><a href="https://zh.cppreference.com/w/">https://zh.cppreference.com/w/</a></p><p>Learn OpenCV : C++ and Python Examples</p><p><a href="https://github.com/spmallick/learnopencv">https://github.com/spmallick/learnopencv</a></p><p>C Standard Library Reference Tutorial</p><p><a href="https://www.tutorialspoint.com/c_standard_library/index.htm">https://www.tutorialspoint.com/c_standard_library/index.htm</a></p><p>The C++ Standard Library Tutorial</p><p><a href="https://www.tutorialspoint.com/cpp_standard_library/index.htm">https://www.tutorialspoint.com/cpp_standard_library/index.htm</a></p><p>C++ Programming Language</p><p><a href="https://www.geeksforgeeks.org/c-plus-plus/">https://www.geeksforgeeks.org/c-plus-plus/</a></p><p>C Programming Language</p><p><a href="https://www.geeksforgeeks.org/c-programming-language/">https://www.geeksforgeeks.org/c-programming-language/</a></p><p>FunctionX</p><p><a href="http://www.functionx.com/">http://www.functionx.com/</a><br><a href="http://www.functionx.com/cpp/index.htm">http://www.functionx.com/cpp/index.htm</a></p><p>CodesDope - C</p><p><a href="https://www.codesdope.com/c-introduction/">https://www.codesdope.com/c-introduction/</a></p><p>CodesDope - C++</p><p><a href="https://www.codesdope.com/cpp-introduction/">https://www.codesdope.com/cpp-introduction/</a></p><p>C++ 用户手册</p><p><a href="http://docs.manew.com/cpp/left.html">http://docs.manew.com/cpp/left.html</a></p><p>Getting started with C++</p><p><a href="https://cplusplus.programmingpedia.net/">https://cplusplus.programmingpedia.net/</a></p><p>Getting started with C Language</p><p><a href="https://c.programmingpedia.net/">https://c.programmingpedia.net/</a></p><p>Standard Template Library - STL - 标准模板库</p><p><a href="http://c.biancheng.net/stl/">http://c.biancheng.net/stl/</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> C++ </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>安装Git教程、配置SSH</title>
       <link href="/an-zhuang-git.html"/>
       <url>/an-zhuang-git.html</url>
