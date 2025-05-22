@@ -6,7 +6,7 @@
   <link href="https://kotewall.cn/atom.xml" rel="self"/>
   
   <link href="https://kotewall.cn/"/>
-  <updated>2025-05-22T13:50:01.646Z</updated>
+  <updated>2025-05-22T13:58:44.885Z</updated>
   <id>https://kotewall.cn/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://kotewall.cn/ru-he-fa-bu-wen-zhang.html"/>
     <id>https://kotewall.cn/ru-he-fa-bu-wen-zhang.html</id>
     <published>2024-03-22T13:34:20.000Z</published>
-    <updated>2025-05-22T13:50:01.646Z</updated>
+    <updated>2025-05-22T13:58:44.885Z</updated>
     
     
       
@@ -36,7 +36,9 @@
     
     
     
-    <category term="hexo" scheme="https://kotewall.cn/tags/hexo/"/>
+    <category term="博客" scheme="https://kotewall.cn/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+    <category term="Hexo" scheme="https://kotewall.cn/tags/Hexo/"/>
     
   </entry>
   
