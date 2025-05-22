@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>hexo如何发布一篇文章</title>
+      <link href="/ru-he-fa-bu-wen-zhang.html"/>
+      <url>/ru-he-fa-bu-wen-zhang.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="hexo发布文章"><a href="#hexo发布文章" class="headerlink" title="hexo发布文章"></a>hexo发布文章</h1><p>TODO后续整理</p><p>参考：<a href="https://winney07.github.io/2018/08/02/%E5%9C%A8Hexo%E5%8D%9A%E5%AE%A2%E4%B8%AD%E5%8F%91%E5%B8%83%E6%96%87%E7%AB%A0/">https://winney07.github.io/2018/08/02/%E5%9C%A8Hexo%E5%8D%9A%E5%AE%A2%E4%B8%AD%E5%8F%91%E5%B8%83%E6%96%87%E7%AB%A0/</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>C++在线文档查阅</title>
       <link href="/c-jia-jia-wen-dang.html"/>
       <url>/c-jia-jia-wen-dang.html</url>
@@ -21,31 +40,6 @@
         <tags>
             
             <tag> C++ </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>安装Git教程、配置SSH</title>
-      <link href="/an-zhuang-git.html"/>
-      <url>/an-zhuang-git.html</url>
-      
-        <content type="html"><![CDATA[<h1 id="安装Git教程、配置SSH"><a href="#安装Git教程、配置SSH" class="headerlink" title="安装Git教程、配置SSH"></a>安装Git教程、配置SSH</h1><p>参考文档：<br><a href="https://blog.csdn.net/weixin_49380944/article/details/125905959">https://blog.csdn.net/weixin_49380944/article/details/125905959</a></p><p><a href="https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%88%9D%E6%AC%A1%E8%BF%90%E8%A1%8C-Git-%E5%89%8D%E7%9A%84%E9%85%8D%E7%BD%AE">https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%88%9D%E6%AC%A1%E8%BF%90%E8%A1%8C-Git-%E5%89%8D%E7%9A%84%E9%85%8D%E7%BD%AE</a></p><h2 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h2><p>git新版本下载安装参考上述链接</p><p>版本记录：2.42.0</p><p><strong>配置</strong></p><pre><code>git config --global user.name &quot;kotewall&quot;git config --global user.email a163wx@163.com</code></pre><h2 id="ubuntu"><a href="#ubuntu" class="headerlink" title="ubuntu"></a>ubuntu</h2><pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">sudo</span> add-apt-repository ppa:git-core/ppa<span class="token function">sudo</span> apt update<span class="token function">sudo</span> apt <span class="token function">install</span> <span class="token function">git</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p>##配置SSH<br>配置SSH参考网上教程，linux只需执行几句命令行就可。</p><p>windows可以从可选功能里选择安装openssh服务。</p><p>神坑地方：<em>本人采用的是win11系统当初在激活系统的时候登陆了微软的账号，导致用户文件夹，密码等都默认设置成微软账号的规则，在连接ssh的时候发现密码一直错误，后排查端口、防火墙等设置都没有改正，直到尝试使用微软账号才ssh连接成功</em></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Git </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Git </tag>
             
         </tags>
       
@@ -75,6 +69,31 @@
             <tag> JS </tag>
             
             <tag> Hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>安装Git教程、配置SSH</title>
+      <link href="/an-zhuang-git.html"/>
+      <url>/an-zhuang-git.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="安装Git教程、配置SSH"><a href="#安装Git教程、配置SSH" class="headerlink" title="安装Git教程、配置SSH"></a>安装Git教程、配置SSH</h1><p>参考文档：<br><a href="https://blog.csdn.net/weixin_49380944/article/details/125905959">https://blog.csdn.net/weixin_49380944/article/details/125905959</a></p><p><a href="https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%88%9D%E6%AC%A1%E8%BF%90%E8%A1%8C-Git-%E5%89%8D%E7%9A%84%E9%85%8D%E7%BD%AE">https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%88%9D%E6%AC%A1%E8%BF%90%E8%A1%8C-Git-%E5%89%8D%E7%9A%84%E9%85%8D%E7%BD%AE</a></p><h2 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h2><p>git新版本下载安装参考上述链接</p><p>版本记录：2.42.0</p><p><strong>配置</strong></p><pre><code>git config --global user.name &quot;kotewall&quot;git config --global user.email a163wx@163.com</code></pre><h2 id="ubuntu"><a href="#ubuntu" class="headerlink" title="ubuntu"></a>ubuntu</h2><pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">sudo</span> add-apt-repository ppa:git-core/ppa<span class="token function">sudo</span> apt update<span class="token function">sudo</span> apt <span class="token function">install</span> <span class="token function">git</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p>##配置SSH<br>配置SSH参考网上教程，linux只需执行几句命令行就可。</p><p>windows可以从可选功能里选择安装openssh服务。</p><p>神坑地方：<em>本人采用的是win11系统当初在激活系统的时候登陆了微软的账号，导致用户文件夹，密码等都默认设置成微软账号的规则，在连接ssh的时候发现密码一直错误，后排查端口、防火墙等设置都没有改正，直到尝试使用微软账号才ssh连接成功</em></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Git </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Git </tag>
             
         </tags>
       
